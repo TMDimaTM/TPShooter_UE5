@@ -69,7 +69,8 @@ void ARifleActor::PlayerShot(UCameraComponent* Camera)
 	{
 		SpawnRotation = Camera->GetComponentRotation();
 	}
-	GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnLocation, SpawnRotation);
+	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnLocation, SpawnRotation);
+	SpawnedProjectile->SetOwner(GetOwner());
 }
 
 void ARifleActor::EnemyShot()

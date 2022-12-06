@@ -3,6 +3,7 @@
 
 #include "Characters/ShooterCharacter.h"
 #include "Actors/RifleActor.h"
+#include "Components/HealthComponent.h"
 #include "Interfaces/WeaponInterface.h"
 
 // Sets default values
@@ -11,6 +12,7 @@ AShooterCharacter::AShooterCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
@@ -49,4 +51,11 @@ void AShooterCharacter::StopFiring()
 	{
 		Interface->Execute_StopFiring(CurrentWeapon);
 	}
+}
+
+void AShooterCharacter::DeathParent()
+{
+	bIsDead = true;
+
+	SetActorEnableCollision(false);
 }

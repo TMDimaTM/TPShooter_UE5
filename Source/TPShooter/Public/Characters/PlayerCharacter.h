@@ -4,19 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Characters/ShooterCharacter.h"
+#include "Interfaces/DeathInterface.h"
 #include "PlayerCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSHOOTER_API APlayerCharacter : public AShooterCharacter
+class TPSHOOTER_API APlayerCharacter : public AShooterCharacter, public IDeathInterface
 {
 	GENERATED_BODY()
 	
 public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Death();
+	virtual void Death_Implementation();
 
 private:
 	// Movement inputs

@@ -29,4 +29,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class AProjectileActor> Projectile;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireRate;
 };

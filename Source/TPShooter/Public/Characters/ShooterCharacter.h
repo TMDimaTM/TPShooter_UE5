@@ -27,11 +27,18 @@ protected:
 	void Fire();
 	void StopFiring();
 
+	void DeathParent();
+
 private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UHealthComponent* HealthComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 	TSubclassOf<class ARifleActor> Rifle;
 	ARifleActor* SpawnedRifle;
 
 	AActor* CurrentWeapon;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsDead;
 };

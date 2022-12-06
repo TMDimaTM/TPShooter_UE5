@@ -31,9 +31,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* MuzzleFlash;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Combat")
-	float FireRate;
-
 	FTimerHandle FireTimerHandle;
 
 	UFUNCTION()

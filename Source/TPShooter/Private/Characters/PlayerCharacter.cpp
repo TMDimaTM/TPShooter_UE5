@@ -38,3 +38,10 @@ void APlayerCharacter::MoveRight(float AxisValue)
 {
 	AddMovementInput(GetActorRightVector(), AxisValue);
 }
+
+void APlayerCharacter::Death_Implementation()
+{
+	DeathParent();
+
+	UE_LOG(LogTemp, Warning, TEXT("Player Death"));
+}

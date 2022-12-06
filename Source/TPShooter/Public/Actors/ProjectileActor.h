@@ -30,6 +30,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UProjectileMovementComponent* ProjectileMovementComp;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float Damage;
+
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	UParticleSystem* HitEffect;
 

@@ -15,6 +15,8 @@ AProjectileActor::AProjectileActor()
 	SetRootComponent(Mesh);
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
+
+	Damage = 5.0f;
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +37,12 @@ void AProjectileActor::Tick(float DeltaTime)
 void AProjectileActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, GetActorTransform());
+	
+	if (OtherActor != nullptr && OtherActor != GetOwner() && OtherActor != this)
+	{
+		FDamageEvent DamageEvent;
+		OtherActor->TakeDamage(Damage, DamageEvent, GetOwner()->GetInstigatorController(), this);
+	}
 
 	Destroy();
 }
