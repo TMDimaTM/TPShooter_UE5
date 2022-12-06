@@ -23,7 +23,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	void Fire();
+	void StopFiring();
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-	TSubclassOf<class AWeaponActor> Rifle;
+	TSubclassOf<class ARifleActor> Rifle;
+	ARifleActor* SpawnedRifle;
+
+	AActor* CurrentWeapon;
+
 };

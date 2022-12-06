@@ -4,14 +4,40 @@
 
 #include "CoreMinimal.h"
 #include "Actors/WeaponActor.h"
+#include "Interfaces/WeaponInterface.h"
 #include "RifleActor.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSHOOTER_API ARifleActor : public AWeaponActor
+class TPSHOOTER_API ARifleActor : public AWeaponActor, public IWeaponInterface
 {
 	GENERATED_BODY()
 	
+public:
+	ARifleActor();
+
+public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Fire();
+	virtual void Fire_Implementation();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void StopFiring();
+	virtual void StopFiring_Implementation();
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UParticleSystemComponent* MuzzleFlash;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireRate;
+
+	FTimerHandle FireTimerHandle;
+
+	UFUNCTION()
+	void PlayerShot(UCameraComponent* Camera);
+
+	void EnemyShot();
 };

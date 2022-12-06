@@ -23,8 +23,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
+protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USkeletalMeshComponent* Mesh;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class AProjectileActor> Projectile;
 };

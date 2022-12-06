@@ -7,7 +7,7 @@
 AWeaponActor::AWeaponActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh Component"));
 	SetRootComponent(Mesh);
@@ -26,4 +26,3 @@ void AWeaponActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
