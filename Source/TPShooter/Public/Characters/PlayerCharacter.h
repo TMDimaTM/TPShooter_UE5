@@ -14,7 +14,10 @@ UCLASS()
 class TPSHOOTER_API APlayerCharacter : public AShooterCharacter, public IDeathInterface
 {
 	GENERATED_BODY()
-	
+
+public:
+	APlayerCharacter();
+
 public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -24,6 +27,15 @@ public:
 	virtual void Death_Implementation();
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UAIPerceptionStimuliSourceComponent* AIStimuliSource;
+
 	// Movement inputs
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);

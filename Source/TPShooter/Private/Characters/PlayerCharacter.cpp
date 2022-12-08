@@ -2,8 +2,25 @@
 
 
 #include "Characters/PlayerCharacter.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 
+
+APlayerCharacter::APlayerCharacter()
+{
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->TargetArmLength = 200.0f;
+	SpringArm->SocketOffset = FVector(0.0f, 50.0f, 75.0f);
+	SpringArm->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+
+	AIStimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AI Stimuli Source Component"));
+}
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

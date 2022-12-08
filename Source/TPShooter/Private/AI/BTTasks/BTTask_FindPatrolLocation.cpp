@@ -2,6 +2,7 @@
 
 
 #include "AI/BTTasks/BTTask_FindPatrolLocation.h"
+#include "NavigationSystem.h"
 #include "BrainComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
@@ -12,14 +13,16 @@ UBTTask_FindPatrolLocation::UBTTask_FindPatrolLocation()
 {
 	NodeName = TEXT("Find Patrol Location");
 
-	PatrolDistance = 500.0f;
+	Radius = 2500.0f;
 }
 
 EBTNodeResult::Type UBTTask_FindPatrolLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	APawn* SelfPawn = OwnerComp.GetAIOwner()->GetPawn();
+	FVector SelfPawnLocation = SelfPawn->GetActorLocation();
 
-	FVector PatrolLocation = (-SelfPawn->GetActorForwardVector()) * PatrolDistance + SelfPawn->GetActorLocation();
+	FVector PatrolLocation = UNavigationSystemV1::GetRandomReachablePointInRadius(this, SelfPawnLocation, Radius);
+
 	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PatrolLocation);
 
 	return EBTNodeResult::Succeeded;

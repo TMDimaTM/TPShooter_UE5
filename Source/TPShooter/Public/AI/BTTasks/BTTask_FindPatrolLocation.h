@@ -19,7 +19,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Patrol")
-	float PatrolDistance;
+	float Radius;
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

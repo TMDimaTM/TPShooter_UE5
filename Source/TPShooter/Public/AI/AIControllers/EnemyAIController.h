@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -14,10 +15,22 @@ class TPSHOOTER_API AEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
 
+public:
+	AEnemyAIController();
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UAIPerceptionComponent* AIPerceptionComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UAISenseConfig_Sight* SightConfig;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Trees")
 	UBehaviorTree* BehaviorTree;
+
+	UFUNCTION()
+	void PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus);
 };

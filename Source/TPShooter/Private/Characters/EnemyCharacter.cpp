@@ -7,5 +7,5 @@ void AEnemyCharacter::Death_Implementation()
 {
 	DeathParent();
 
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Death"));
+	DetachFromControllerPendingDestroy();
 }
