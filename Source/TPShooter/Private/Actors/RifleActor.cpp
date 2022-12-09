@@ -75,5 +75,5 @@ void ARifleActor::PlayerShot(UCameraComponent* Camera)
 
 void ARifleActor::EnemyShot()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
 }

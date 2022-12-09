@@ -16,6 +16,9 @@ class TPSHOOTER_API AEnemyCharacter : public AShooterCharacter, public IDeathInt
 	GENERATED_BODY()
 
 public:
+	void Fire();
+	void StopFiring();
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void Death();
 	virtual void Death_Implementation();

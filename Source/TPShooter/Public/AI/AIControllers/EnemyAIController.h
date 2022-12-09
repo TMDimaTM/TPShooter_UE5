@@ -31,6 +31,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Trees")
 	UBehaviorTree* BehaviorTree;
 
+	class AEnemyCharacter* Character;
+
 	UFUNCTION()
 	void PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus);
 };

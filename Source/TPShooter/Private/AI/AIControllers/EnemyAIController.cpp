@@ -6,6 +6,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Characters/PlayerCharacter.h"
+#include "Characters/EnemyCharacter.h"
 
 
 
@@ -25,6 +26,8 @@ void AEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Character = Cast<AEnemyCharacter>(GetPawn());
+
 	RunBehaviorTree(BehaviorTree);
 
 	AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::PerceptionUpdate);
@@ -39,11 +42,15 @@ void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 		if (Stimulus.WasSuccessfullySensed())
 		{
 			BlackboardComp->SetValueAsObject("Player", PlayerCharacter);
+
+			Character->bUseControllerRotationYaw = true;
 		}
 		else
 		{
 			BlackboardComp->ClearValue("Player");
 			BlackboardComp->SetValueAsVector("LastPlayerLocation", PlayerCharacter->GetActorLocation());
+
+			Character->bUseControllerRotationYaw = false;
 		}
 	}
 }
