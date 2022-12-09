@@ -3,10 +3,12 @@
 
 #include "Actors/RifleActor.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Actors/ProjectileActor.h"
 #include "TimerManager.h"
+#include "GameFramework/Character.h"
 
 
 
@@ -33,6 +35,8 @@ void ARifleActor::Fire_Implementation()
 	else
 	{
 		EnemyShot();
+
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ARifleActor::EnemyShot, FireRate, true);
 	}
 }
 
@@ -75,5 +79,16 @@ void ARifleActor::PlayerShot(UCameraComponent* Camera)
 
 void ARifleActor::EnemyShot()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+
+	FVector SpawnLocation;
+	FRotator SpawnRotation;
+
+	FTransform MuzzleSocketTransform = Mesh->GetSocketTransform("MuzzleFlashSocket");
+
+	SpawnLocation = MuzzleSocketTransform.GetLocation();
+	SpawnRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, PlayerCharacter->GetActorLocation());
+
+	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnLocation, SpawnRotation);
+	SpawnedProjectile->SetOwner(GetOwner());
 }

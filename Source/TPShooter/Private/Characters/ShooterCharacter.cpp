@@ -57,5 +57,6 @@ void AShooterCharacter::DeathParent()
 {
 	bIsDead = true;
 
+	StopFiring();
 	SetActorEnableCollision(false);
 }
