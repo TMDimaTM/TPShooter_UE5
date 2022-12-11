@@ -35,7 +35,7 @@ void AEnemyAIController::BeginPlay()
 
 void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 {
-	if (APlayerCharacter * PlayerCharacter = Cast<APlayerCharacter>(Actor))
+	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Actor))
 	{
 		UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
 
@@ -48,9 +48,16 @@ void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 		else
 		{
 			BlackboardComp->ClearValue("Player");
-			BlackboardComp->SetValueAsVector("LastPlayerLocation", PlayerCharacter->GetActorLocation());
+			SetLastPlayerLocation(PlayerCharacter);
 
 			Character->bUseControllerRotationYaw = false;
 		}
 	}
+}
+
+void AEnemyAIController::SetLastPlayerLocation(AActor* PlayerActor)
+{
+	UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
+
+	BlackboardComp->SetValueAsVector("LastPlayerLocation", PlayerActor->GetActorLocation());
 }

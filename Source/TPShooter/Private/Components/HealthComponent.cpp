@@ -2,7 +2,12 @@
 
 
 #include "Components/HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Interfaces/DeathInterface.h"
+#include "AI/AIControllers/EnemyAIController.h"
+#include "GameModes/ShooterGameModeBase.h"
+
+
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -25,13 +30,6 @@ void UHealthComponent::BeginPlay()
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 }
 
-
-// Called every frame
-void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
 	if (CurrentHealth > 0)
@@ -42,6 +40,28 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 			if (IDeathInterface* Interface = Cast<IDeathInterface>(DamagedActor))
 			{
 				Interface->Execute_Death(DamagedActor);
+
+				AShooterGameModeBase* GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
+				if (GameMode != nullptr)
+				{
+					GameMode->CheckGameCondition(DamagedActor);
+				}
+			}
+		}
+		else
+		{
+			AController* PlayerController = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
+			if (PlayerController != nullptr && InstigatedBy == PlayerController)
+			{
+				APawn* OwnerPawn = Cast<APawn>(GetOwner());
+				if (OwnerPawn != nullptr)
+				{
+					AEnemyAIController* OwnerAIController = Cast<AEnemyAIController>(OwnerPawn->GetController());
+					if (OwnerAIController != nullptr)
+					{
+						OwnerAIController->SetLastPlayerLocation(PlayerController->GetPawn());
+					}
+				}
 			}
 		}
 	}
@@ -51,4 +71,3 @@ float UHealthComponent::GetCurrentHealth()
 {
 	return CurrentHealth / TotalHealth;
 }
-

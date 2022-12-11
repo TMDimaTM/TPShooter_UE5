@@ -20,6 +20,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsDead;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -38,7 +41,4 @@ private:
 	ARifleActor* SpawnedRifle;
 
 	AActor* CurrentWeapon;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsDead;
 };

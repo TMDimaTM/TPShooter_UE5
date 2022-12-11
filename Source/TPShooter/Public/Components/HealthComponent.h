@@ -20,9 +20,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION()
+	float GetCurrentHealth();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
@@ -31,7 +30,4 @@ private:
 
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-
-	UFUNCTION(BlueprintPure, meta = (AllowPrivateAccess = "true"))
-	float GetCurrentHealth();
 };

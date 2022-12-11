@@ -41,7 +41,10 @@ void AShooterCharacter::Fire()
 {
 	if (IWeaponInterface* Interface = Cast<IWeaponInterface>(CurrentWeapon))
 	{
-		Interface->Execute_Fire(CurrentWeapon);
+		if (!bIsDead)
+		{
+			Interface->Execute_Fire(CurrentWeapon);
+		}
 	}
 }
 

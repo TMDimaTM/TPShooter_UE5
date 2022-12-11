@@ -21,6 +21,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	void SetLastPlayerLocation(AActor* PlayerActor);
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UAIPerceptionComponent* AIPerceptionComp;

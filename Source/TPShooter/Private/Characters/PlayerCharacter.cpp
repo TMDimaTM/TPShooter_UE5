@@ -60,5 +60,5 @@ void APlayerCharacter::Death_Implementation()
 {
 	DeathParent();
 
-	UE_LOG(LogTemp, Warning, TEXT("Player Death"));
+	DisableInput(GetWorld()->GetFirstPlayerController());
 }
