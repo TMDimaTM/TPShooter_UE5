@@ -39,4 +39,8 @@ private:
 	// Movement inputs
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	// Sprint inputs
+	void SprintPressed();
+	void SprintReleased();
 };

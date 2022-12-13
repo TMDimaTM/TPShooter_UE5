@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 
@@ -42,6 +43,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	// Fire bindings
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerCharacter::Fire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &APlayerCharacter::StopFiring);
+
+	// Sprint bindings
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::SprintPressed);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::SprintReleased);
 }
 
 // Move forward input
@@ -54,6 +59,20 @@ void APlayerCharacter::MoveForward(float AxisValue)
 void APlayerCharacter::MoveRight(float AxisValue)
 {
 	AddMovementInput(GetActorRightVector(), AxisValue);
+}
+
+// Sprint press input
+void APlayerCharacter::SprintPressed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintMaxSpeed;
+
+	StopFiring();
+}
+
+// Sprint release input
+void APlayerCharacter::SprintReleased()
+{
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMaxSpeed;
 }
 
 void APlayerCharacter::Death_Implementation()

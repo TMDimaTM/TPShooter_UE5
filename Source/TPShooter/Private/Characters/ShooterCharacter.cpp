@@ -10,7 +10,7 @@
 AShooterCharacter::AShooterCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
@@ -30,18 +30,11 @@ void AShooterCharacter::BeginPlay()
 	CurrentWeapon = SpawnedRifle;
 }
 
-// Called every frame
-void AShooterCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AShooterCharacter::Fire()
 {
 	if (IWeaponInterface* Interface = Cast<IWeaponInterface>(CurrentWeapon))
 	{
-		if (!bIsDead)
+		if (!bIsDead && !IsSprinting())
 		{
 			Interface->Execute_Fire(CurrentWeapon);
 		}
@@ -55,6 +48,12 @@ void AShooterCharacter::StopFiring()
 		Interface->Execute_StopFiring(CurrentWeapon);
 	}
 }
+
+bool AShooterCharacter::IsSprinting()
+{
+	return GetVelocity().Length() >= SprintMaxSpeed - 10.0f;
+}
+
 
 void AShooterCharacter::DeathParent()
 {

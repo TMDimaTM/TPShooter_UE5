@@ -23,10 +23,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsDead;
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 protected:
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	float DefaultMaxSpeed = 375.0f;
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	float SprintMaxSpeed = 500.0f;
+
 	void Fire();
 	void StopFiring();
 
@@ -41,4 +43,6 @@ private:
 	ARifleActor* SpawnedRifle;
 
 	AActor* CurrentWeapon;
+
+	bool IsSprinting();
 };
