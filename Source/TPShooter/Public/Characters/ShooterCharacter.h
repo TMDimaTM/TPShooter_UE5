@@ -24,9 +24,9 @@ public:
 	bool bIsDead;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float DefaultMaxSpeed = 375.0f;
-	UPROPERTY(VisibleAnywhere, Category = "Movement")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintMaxSpeed = 500.0f;
 
 	void Fire();
