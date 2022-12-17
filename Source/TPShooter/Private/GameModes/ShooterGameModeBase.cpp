@@ -3,10 +3,18 @@
 
 #include "GameModes/ShooterGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 #include "Characters/PlayerCharacter.h"
 #include "Characters/EnemyCharacter.h"
+#include "HUDs/ShooterHUD.h"
+#include "UserWidgets/GameOverUserWidget.h"
 
 
+
+AShooterGameModeBase::AShooterGameModeBase()
+{
+	RestartLevelTime = 3.0f;
+}
 
 void AShooterGameModeBase::BeginPlay()
 {
@@ -19,13 +27,13 @@ void AShooterGameModeBase::CheckGameCondition(AActor* DeadActor)
 {
 	if (Cast<APlayerCharacter>(DeadActor))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Lose"));
+		GameOver(false);
 	}
 	else
 	{
 		if (GetAliveEnemies().Num() <= 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Win"));
+			GameOver(true);
 		}
 	}
 }
@@ -52,4 +60,37 @@ TArray<AActor*> AShooterGameModeBase::GetAliveEnemies()
 FText AShooterGameModeBase::GetEnemiesLeft()
 {
 	return FText::AsNumber(AliveEnemyActors.Num());
+}
+
+void AShooterGameModeBase::GameOver(bool bIsWin)
+{
+	RemoveHUD();
+	CreateGameOverWidget(bIsWin);
+
+	FTimerHandle RestartLevelTimerHandle;
+	GetWorldTimerManager().SetTimer(RestartLevelTimerHandle, this, &AShooterGameModeBase::RestartLevel, RestartLevelTime, false);
+}
+
+void AShooterGameModeBase::RemoveHUD()
+{
+	AShooterHUD* HUD = Cast<AShooterHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (HUD != nullptr)
+	{
+		HUD->RemoveHUD();
+	}
+}
+
+void AShooterGameModeBase::CreateGameOverWidget(bool bIsWin)
+{
+	GameOverWidget = CreateWidget<UGameOverUserWidget>(GetWorld(), GameOverWidgetClass);
+	GameOverWidget->bIsWin = bIsWin;
+	GameOverWidget->AddToViewport();
+}
+
+void AShooterGameModeBase::RestartLevel()
+{
+	FString CurrentMapName = GetWorld()->GetMapName();
+	CurrentMapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	UGameplayStatics::OpenLevel(this, FName(CurrentMapName));
 }

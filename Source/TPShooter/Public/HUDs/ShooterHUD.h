@@ -17,6 +17,9 @@ class TPSHOOTER_API AShooterHUD : public AHUD
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	void RemoveHUD();
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "User Widgets")
 	TSubclassOf<class UHUDUserWidget> HUDWidgetClass;

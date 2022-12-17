@@ -14,3 +14,8 @@ void AShooterHUD::BeginPlay()
 	HUDWidget = CreateWidget<UHUDUserWidget>(GetWorld(), HUDWidgetClass);
 	HUDWidget->AddToViewport();
 }
+
+void AShooterHUD::RemoveHUD()
+{
+	HUDWidget->RemoveFromParent();
+}
