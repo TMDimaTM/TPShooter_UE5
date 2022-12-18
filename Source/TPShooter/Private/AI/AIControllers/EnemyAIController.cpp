@@ -28,7 +28,10 @@ void AEnemyAIController::BeginPlay()
 
 	Character = Cast<AEnemyCharacter>(GetPawn());
 
-	RunBehaviorTree(BehaviorTree);
+	if (BehaviorTree != nullptr)
+	{
+		RunBehaviorTree(BehaviorTree);
+	}
 
 	AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::PerceptionUpdate);
 }
@@ -38,19 +41,21 @@ void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Actor))
 	{
 		UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
-
-		if (Stimulus.WasSuccessfullySensed())
+		if (BlackboardComp != nullptr && Character != nullptr)
 		{
-			BlackboardComp->SetValueAsObject("Player", PlayerCharacter);
+			if (Stimulus.WasSuccessfullySensed())
+			{
+				BlackboardComp->SetValueAsObject("Player", PlayerCharacter);
 
-			Character->bUseControllerRotationYaw = true;
-		}
-		else
-		{
-			BlackboardComp->ClearValue("Player");
-			SetLastPlayerLocation(PlayerCharacter);
+				Character->bUseControllerRotationYaw = true;
+			}
+			else
+			{
+				BlackboardComp->ClearValue("Player");
+				SetLastPlayerLocation(PlayerCharacter);
 
-			Character->bUseControllerRotationYaw = false;
+				Character->bUseControllerRotationYaw = false;
+			}
 		}
 	}
 }
@@ -58,6 +63,8 @@ void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 void AEnemyAIController::SetLastPlayerLocation(AActor* PlayerActor)
 {
 	UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
-
-	BlackboardComp->SetValueAsVector("LastPlayerLocation", PlayerActor->GetActorLocation());
+	if (BlackboardComp != nullptr && PlayerActor != nullptr)
+	{
+		BlackboardComp->SetValueAsVector("LastPlayerLocation", PlayerActor->GetActorLocation());
+	}
 }

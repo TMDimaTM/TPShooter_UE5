@@ -82,9 +82,12 @@ void AShooterGameModeBase::RemoveHUD()
 
 void AShooterGameModeBase::CreateGameOverWidget(bool bIsWin)
 {
-	GameOverWidget = CreateWidget<UGameOverUserWidget>(GetWorld(), GameOverWidgetClass);
-	GameOverWidget->bIsWin = bIsWin;
-	GameOverWidget->AddToViewport();
+	if (GameOverWidgetClass)
+	{
+		GameOverWidget = CreateWidget<UGameOverUserWidget>(GetWorld(), GameOverWidgetClass);
+		GameOverWidget->bIsWin = bIsWin;
+		GameOverWidget->AddToViewport();
+	}
 }
 
 void AShooterGameModeBase::RestartLevel()

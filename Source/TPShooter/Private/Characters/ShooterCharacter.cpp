@@ -23,11 +23,14 @@ void AShooterCharacter::BeginPlay()
 	// Spawn rifle with attaching to Character
 	FTransform SocketTransform = GetMesh()->GetSocketTransform("rifle_r");
 
-	SpawnedRifle = GetWorld()->SpawnActor<ARifleActor>(Rifle, SocketTransform);
-	SpawnedRifle->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "rifle_r");
-	SpawnedRifle->SetOwner(this);
+	if (Rifle)
+	{
+		SpawnedRifle = GetWorld()->SpawnActor<ARifleActor>(Rifle, SocketTransform);
+		SpawnedRifle->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "rifle_r");
+		SpawnedRifle->SetOwner(this);
 
-	CurrentWeapon = SpawnedRifle;
+		CurrentWeapon = SpawnedRifle;
+	}
 }
 
 void AShooterCharacter::Fire()

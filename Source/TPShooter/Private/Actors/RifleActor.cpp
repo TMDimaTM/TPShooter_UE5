@@ -20,6 +20,13 @@ ARifleActor::ARifleActor()
 	FireRate = 0.1f;
 }
 
+void ARifleActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+}
+
 void ARifleActor::Fire_Implementation()
 {
 	MuzzleFlash->Activate();
@@ -49,46 +56,46 @@ void ARifleActor::StopFiring_Implementation()
 
 void ARifleActor::PlayerShot(UCameraComponent* Camera)
 {
-	FVector StartLocation;
-	FVector EndLocation;
-
-	FVector SpawnLocation;
-	FRotator SpawnRotation;
-
-	FHitResult HitResult;
-
-	FTransform MuzzleSocketTransform = Mesh->GetSocketTransform("MuzzleFlashSocket");
-
-	StartLocation = Camera->GetComponentLocation();
-	EndLocation = Camera->GetForwardVector() * 99999.0f + StartLocation;
-
-	SpawnLocation = MuzzleSocketTransform.GetLocation();
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility);
-	if (bHit)
+	if (Camera != nullptr)
 	{
-		SpawnRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, HitResult.ImpactPoint);
+		FVector StartLocation;
+		FVector EndLocation;
+
+		FHitResult HitResult;
+
+		StartLocation = Camera->GetComponentLocation();
+		EndLocation = Camera->GetForwardVector() * 99999.0f + StartLocation;
+
+		SpawnProjectileLocation = Mesh->GetSocketTransform("MuzzleFlashSocket").GetLocation();
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility);
+		if (bHit)
+		{
+			SpawnProjectileRotation = UKismetMathLibrary::FindLookAtRotation(SpawnProjectileLocation, HitResult.ImpactPoint);
+		}
+		else
+		{
+			SpawnProjectileRotation = Camera->GetComponentRotation();
+		}
+
+		SpawnProjectile();
 	}
-	else
-	{
-		SpawnRotation = Camera->GetComponentRotation();
-	}
-	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnLocation, SpawnRotation);
-	SpawnedProjectile->SetOwner(GetOwner());
 }
 
 void ARifleActor::EnemyShot()
 {
-	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+	SpawnProjectileLocation = Mesh->GetSocketTransform("MuzzleFlashSocket").GetLocation();
 
-	FVector SpawnLocation;
-	FRotator SpawnRotation;
+	if (PlayerCharacter != nullptr)
+	{
+		SpawnProjectileRotation = UKismetMathLibrary::FindLookAtRotation(SpawnProjectileLocation, PlayerCharacter->GetActorLocation());
+	}
 
-	FTransform MuzzleSocketTransform = Mesh->GetSocketTransform("MuzzleFlashSocket");
+	SpawnProjectile();
+}
 
-	SpawnLocation = MuzzleSocketTransform.GetLocation();
-	SpawnRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, PlayerCharacter->GetActorLocation());
-
-	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnLocation, SpawnRotation);
+void ARifleActor::SpawnProjectile()
+{
+	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnProjectileLocation, SpawnProjectileRotation);
 	SpawnedProjectile->SetOwner(GetOwner());
 }

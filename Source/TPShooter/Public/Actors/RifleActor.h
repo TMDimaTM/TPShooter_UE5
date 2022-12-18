@@ -27,14 +27,23 @@ public:
 	void StopFiring();
 	virtual void StopFiring_Implementation();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* MuzzleFlash;
 
+	ACharacter* PlayerCharacter;
+
 	FTimerHandle FireTimerHandle;
+
+	FVector SpawnProjectileLocation;
+	FRotator SpawnProjectileRotation;
 
 	UFUNCTION()
 	void PlayerShot(UCameraComponent* Camera);
-
 	void EnemyShot();
+
+	void SpawnProjectile();
 };

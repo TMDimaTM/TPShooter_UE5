@@ -18,7 +18,6 @@ UBTService_SetFocus::UBTService_SetFocus()
 void UBTService_SetFocus::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
-
 	if (BlackboardComp != nullptr)
 	{
 		OwnerComp.GetAIOwner()->SetFocus(Cast<AActor>(BlackboardComp->GetValueAsObject(GetSelectedBlackboardKey())));
@@ -27,5 +26,9 @@ void UBTService_SetFocus::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, ui
 
 void UBTService_SetFocus::OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	OwnerComp.GetAIOwner()->ClearFocus(EAIFocusPriority::Gameplay);
+	AAIController* OwnerController = OwnerComp.GetAIOwner();
+	if (OwnerController != nullptr)
+	{
+		OwnerController->ClearFocus(EAIFocusPriority::Gameplay);
+	}
 }

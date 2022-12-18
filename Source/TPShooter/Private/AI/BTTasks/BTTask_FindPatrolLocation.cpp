@@ -19,11 +19,25 @@ UBTTask_FindPatrolLocation::UBTTask_FindPatrolLocation()
 EBTNodeResult::Type UBTTask_FindPatrolLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	APawn* SelfPawn = OwnerComp.GetAIOwner()->GetPawn();
-	FVector SelfPawnLocation = SelfPawn->GetActorLocation();
+	if (SelfPawn != nullptr)
+	{
+		FVector SelfPawnLocation = SelfPawn->GetActorLocation();
+		FVector PatrolLocation = UNavigationSystemV1::GetRandomReachablePointInRadius(this, SelfPawnLocation, Radius);
 
-	FVector PatrolLocation = UNavigationSystemV1::GetRandomReachablePointInRadius(this, SelfPawnLocation, Radius);
+		UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+		if (BlackboardComp != nullptr)
+		{
+			BlackboardComp->SetValueAsVector(GetSelectedBlackboardKey(), PatrolLocation);
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PatrolLocation);
-
-	return EBTNodeResult::Succeeded;
+			return EBTNodeResult::Succeeded;
+		}
+		else
+		{
+			return EBTNodeResult::Failed;
+		}
+	}
+	else
+	{
+		return EBTNodeResult::Failed;
+	}
 }

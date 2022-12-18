@@ -21,30 +21,37 @@ UBTService_Shoot::UBTService_Shoot()
 void UBTService_Shoot::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* SelfController = OwnerComp.GetAIOwner();
-	AEnemyCharacter* SelfCharacter = Cast<AEnemyCharacter>(SelfController->GetPawn());
-
-	if (SelfCharacter != nullptr)
+	if (SelfController != nullptr)
 	{
-		FTimerDelegate FireDelayTimerDelegate;
+		AEnemyCharacter* SelfCharacter = Cast<AEnemyCharacter>(SelfController->GetPawn());
+		if (SelfCharacter != nullptr)
+		{
+			FTimerDelegate FireDelayTimerDelegate;
 
-		FireDelayTimerDelegate.BindUFunction(this, "FireAfterDelay", SelfCharacter);
-		SelfCharacter->GetWorldTimerManager().SetTimer(FireDelayTimerHandle, FireDelayTimerDelegate, StartFireDelay, false);
+			FireDelayTimerDelegate.BindUFunction(this, "FireAfterDelay", SelfCharacter);
+			SelfCharacter->GetWorldTimerManager().SetTimer(FireDelayTimerHandle, FireDelayTimerDelegate, StartFireDelay, false);
+		}
 	}
 }
 
 void UBTService_Shoot::OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* SelfController = OwnerComp.GetAIOwner();
-	AEnemyCharacter* SelfCharacter = Cast<AEnemyCharacter>(SelfController->GetPawn());
-
-	if (SelfCharacter != nullptr)
+	if (SelfController != nullptr)
 	{
-		SelfCharacter->GetWorldTimerManager().ClearTimer(FireDelayTimerHandle);
-		SelfCharacter->StopFiring();
+		AEnemyCharacter* SelfCharacter = Cast<AEnemyCharacter>(SelfController->GetPawn());
+		if (SelfCharacter != nullptr)
+		{
+			SelfCharacter->GetWorldTimerManager().ClearTimer(FireDelayTimerHandle);
+			SelfCharacter->StopFiring();
+		}
 	}
 }
 
 void UBTService_Shoot::FireAfterDelay(AEnemyCharacter* SelfCharacter)
 {
-	SelfCharacter->Fire();
+	if (SelfCharacter != nullptr)
+	{
+		SelfCharacter->Fire();
+	}
 }

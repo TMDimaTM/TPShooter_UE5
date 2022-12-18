@@ -11,11 +11,17 @@ void AShooterHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HUDWidget = CreateWidget<UHUDUserWidget>(GetWorld(), HUDWidgetClass);
-	HUDWidget->AddToViewport();
+	if (HUDWidgetClass)
+	{
+		HUDWidget = CreateWidget<UHUDUserWidget>(GetWorld(), HUDWidgetClass);
+		HUDWidget->AddToViewport();
+	}
 }
 
 void AShooterHUD::RemoveHUD()
 {
-	HUDWidget->RemoveFromParent();
+	if (HUDWidget != nullptr)
+	{
+		HUDWidget->RemoveFromParent();
+	}
 }
