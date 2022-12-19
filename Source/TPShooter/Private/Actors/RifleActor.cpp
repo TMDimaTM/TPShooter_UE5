@@ -6,7 +6,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Actors/ProjectileActor.h"
 #include "TimerManager.h"
 #include "GameFramework/Character.h"
 
@@ -66,7 +65,7 @@ void ARifleActor::PlayerShot(UCameraComponent* Camera)
 		StartLocation = Camera->GetComponentLocation();
 		EndLocation = Camera->GetForwardVector() * 99999.0f + StartLocation;
 
-		SpawnProjectileLocation = Mesh->GetSocketTransform("MuzzleFlashSocket").GetLocation();
+		SpawnProjectileLocation = GetMuzzleTransform().GetLocation();
 
 		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility);
 		if (bHit)
@@ -84,7 +83,7 @@ void ARifleActor::PlayerShot(UCameraComponent* Camera)
 
 void ARifleActor::EnemyShot()
 {
-	SpawnProjectileLocation = Mesh->GetSocketTransform("MuzzleFlashSocket").GetLocation();
+	SpawnProjectileLocation = GetMuzzleTransform().GetLocation();
 
 	if (PlayerCharacter != nullptr)
 	{
@@ -92,10 +91,4 @@ void ARifleActor::EnemyShot()
 	}
 
 	SpawnProjectile();
-}
-
-void ARifleActor::SpawnProjectile()
-{
-	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnProjectileLocation, SpawnProjectileRotation);
-	SpawnedProjectile->SetOwner(GetOwner());
 }

@@ -2,6 +2,8 @@
 
 
 #include "Actors/WeaponActor.h"
+#include "Actors/ProjectileActor.h"
+
 
 // Sets default values
 AWeaponActor::AWeaponActor()
@@ -13,16 +15,13 @@ AWeaponActor::AWeaponActor()
 	SetRootComponent(Mesh);
 }
 
-// Called when the game starts or when spawned
-void AWeaponActor::BeginPlay()
+FTransform AWeaponActor::GetMuzzleTransform()
 {
-	Super::BeginPlay();
-	
+	return Mesh->GetSocketTransform("MuzzleFlashSocket");
 }
 
-// Called every frame
-void AWeaponActor::Tick(float DeltaTime)
+void AWeaponActor::SpawnProjectile()
 {
-	Super::Tick(DeltaTime);
-
+	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnProjectileLocation, SpawnProjectileRotation);
+	SpawnedProjectile->SetOwner(GetOwner());
 }

@@ -2,9 +2,11 @@
 
 
 #include "Characters/ShooterCharacter.h"
-#include "Actors/RifleActor.h"
 #include "Components/HealthComponent.h"
+#include "Actors/WeaponActor.h"
 #include "Interfaces/WeaponInterface.h"
+
+
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -20,17 +22,39 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Spawn rifle with attaching to Character
+	if (WeaponActorClasses.Num() > 0)
+	{
+		SpawnWeapons();
+		SetStartWeapon();
+	}
+}
+
+void AShooterCharacter::SpawnWeapons()
+{
 	FTransform SocketTransform = GetMesh()->GetSocketTransform("rifle_r");
 
-	if (Rifle)
+	for (int32 i = 0; i < WeaponActorClasses.Num(); i++)
 	{
-		SpawnedRifle = GetWorld()->SpawnActor<ARifleActor>(Rifle, SocketTransform);
-		SpawnedRifle->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "rifle_r");
-		SpawnedRifle->SetOwner(this);
+		AWeaponActor* SpawnedWeapon = GetWorld()->SpawnActor<AWeaponActor>(WeaponActorClasses[i], SocketTransform);
+		SpawnedWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "rifle_r");
+		SpawnedWeapon->SetOwner(this);
 
-		CurrentWeapon = SpawnedRifle;
+		UsableWeapons.Add(SpawnedWeapon);
 	}
+}
+
+void AShooterCharacter::SetStartWeapon()
+{
+	for (int32 i = 1; i < UsableWeapons.Num(); i++)
+	{
+		UsableWeapons[i]->SetActorHiddenInGame(true);
+	}
+	CurrentWeapon = UsableWeapons[0];
+}
+
+bool AShooterCharacter::IsSprinting()
+{
+	return GetVelocity().Length() >= SprintMaxSpeed - 10.0f;
 }
 
 void AShooterCharacter::Fire()
@@ -52,11 +76,24 @@ void AShooterCharacter::StopFiring()
 	}
 }
 
-bool AShooterCharacter::IsSprinting()
+void AShooterCharacter::ChangeWeapon()
 {
-	return GetVelocity().Length() >= SprintMaxSpeed - 10.0f;
-}
+	StopFiring();
 
+	CurrentWeapon->SetActorHiddenInGame(true);
+
+	if (CurrentWeaponIndex >= UsableWeapons.Num() - 1)
+	{
+		CurrentWeaponIndex = 0;
+	}
+	else
+	{
+		CurrentWeaponIndex++;
+	}
+
+	CurrentWeapon = UsableWeapons[CurrentWeaponIndex];
+	CurrentWeapon->SetActorHiddenInGame(false);
+}
 
 void AShooterCharacter::DeathParent()
 {

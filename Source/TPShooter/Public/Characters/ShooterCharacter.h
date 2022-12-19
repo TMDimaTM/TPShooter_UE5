@@ -32,6 +32,8 @@ protected:
 	void Fire();
 	void StopFiring();
 
+	void ChangeWeapon();
+
 	void DeathParent();
 
 private:
@@ -39,10 +41,16 @@ private:
 	class UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-	TSubclassOf<class ARifleActor> Rifle;
-	ARifleActor* SpawnedRifle;
+	TArray<TSubclassOf<class AWeaponActor>> WeaponActorClasses;
+
+	TArray<AWeaponActor*> UsableWeapons;
 
 	AActor* CurrentWeapon;
 
+	int32 CurrentWeaponIndex;
+
 	bool IsSprinting();
+
+	void SpawnWeapons();
+	void SetStartWeapon();
 };

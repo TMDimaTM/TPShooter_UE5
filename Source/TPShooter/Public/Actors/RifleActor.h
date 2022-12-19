@@ -34,16 +34,14 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UParticleSystemComponent* MuzzleFlash;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireRate;
+
 	ACharacter* PlayerCharacter;
 
 	FTimerHandle FireTimerHandle;
 
-	FVector SpawnProjectileLocation;
-	FRotator SpawnProjectileRotation;
-
 	UFUNCTION()
 	void PlayerShot(UCameraComponent* Camera);
 	void EnemyShot();
-
-	void SpawnProjectile();
 };

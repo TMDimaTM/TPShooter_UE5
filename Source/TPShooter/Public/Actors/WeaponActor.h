@@ -16,20 +16,17 @@ public:
 	AWeaponActor();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-protected:
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USkeletalMeshComponent* Mesh;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class AProjectileActor> Projectile;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Combat")
-	float FireRate;
+	FVector SpawnProjectileLocation;
+	FRotator SpawnProjectileRotation;
+
+	FTransform GetMuzzleTransform();
+
+	void SpawnProjectile();
+
+private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USkeletalMeshComponent* Mesh;
 };
