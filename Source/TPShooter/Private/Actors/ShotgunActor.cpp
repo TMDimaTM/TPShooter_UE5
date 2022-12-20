@@ -3,8 +3,16 @@
 
 #include "Actors/ShotgunActor.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Camera/CameraComponent.h"
 
 
+AShotgunActor::AShotgunActor()
+{
+	BulletsPerShot = 5;
+
+	RandomBulletAngle = 2.0f;
+}
 
 void AShotgunActor::Fire_Implementation()
 {
@@ -13,5 +21,20 @@ void AShotgunActor::Fire_Implementation()
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, GetMuzzleTransform());
 	}
 
-	// Shot multiple projectiles in the different directions
+	for (int32 i = 0; i < BulletsPerShot; i++)
+	{
+		GetRandomBulletDirection();
+		SpawnProjectile();
+	}
+}
+
+void AShotgunActor::GetRandomBulletDirection()
+{
+	if (UCameraComponent* Camera = GetOwner()->FindComponentByClass<UCameraComponent>())
+	{
+		SpawnProjectileLocation = GetMuzzleTransform().GetLocation();
+
+		FVector Direction = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(Camera->GetForwardVector(), RandomBulletAngle);
+		SpawnProjectileRotation = Direction.Rotation();
+	}
 }
