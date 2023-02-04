@@ -22,9 +22,9 @@ protected:
 	FVector SpawnProjectileLocation;
 	FRotator SpawnProjectileRotation;
 
-	FTransform GetMuzzleTransform();
+	FTransform GetMuzzleTransform() const;
 
-	void SpawnProjectile();
+	void SpawnProjectile() const;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")

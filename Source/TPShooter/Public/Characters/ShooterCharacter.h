@@ -43,13 +43,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 	TArray<TSubclassOf<class AWeaponActor>> WeaponActorClasses;
 
+	UPROPERTY()
 	TArray<AWeaponActor*> UsableWeapons;
 
+	UPROPERTY()
 	AActor* CurrentWeapon;
 
 	int32 CurrentWeaponIndex;
 
-	bool IsSprinting();
+	bool IsSprinting() const;
 
 	void SpawnWeapons();
 	void SetStartWeapon();

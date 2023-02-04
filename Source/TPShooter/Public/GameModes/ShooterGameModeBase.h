@@ -20,7 +20,7 @@ public:
 	void CheckGameCondition(AActor* DeadActor);
 
 	UFUNCTION()
-	FText GetEnemiesLeft();
+	FText GetAliveEnemiesLeft() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -28,18 +28,20 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Game Over")
 	TSubclassOf<class UGameOverUserWidget> GameOverWidgetClass;
+	UPROPERTY()
 	UGameOverUserWidget* GameOverWidget;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Game Over")
 	float RestartLevelTime;
 
+	UPROPERTY()
 	TArray<AActor*> AliveEnemyActors;
 
 	TArray<AActor*> GetAliveEnemies();
 
 	void GameOver(bool bIsWin);
 
-	void RemoveHUD();
+	void RemoveHUD() const;
 	void CreateGameOverWidget(bool bIsWin);
-	void RestartLevel();
+	void RestartLevel() const;
 };

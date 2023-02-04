@@ -32,34 +32,37 @@ void UHealthComponent::BeginPlay()
 
 void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (CurrentHealth > 0)
+	if (DamagedActor != nullptr)
 	{
-		CurrentHealth -= Damage;
-		if (CurrentHealth <= 0)
+		if (CurrentHealth > 0)
 		{
-			if (IDeathInterface* Interface = Cast<IDeathInterface>(DamagedActor))
+			CurrentHealth -= Damage;
+			if (CurrentHealth <= 0)
 			{
-				Interface->Execute_Death(DamagedActor);
-
-				AShooterGameModeBase* GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
-				if (GameMode != nullptr)
+				if (IDeathInterface* Interface = Cast<IDeathInterface>(DamagedActor))
 				{
-					GameMode->CheckGameCondition(DamagedActor);
+					Interface->Execute_Death(DamagedActor);
+
+					AShooterGameModeBase* GameMode = Cast<AShooterGameModeBase>(GetWorld()->GetAuthGameMode());
+					if (GameMode != nullptr)
+					{
+						GameMode->CheckGameCondition(DamagedActor);
+					}
 				}
 			}
-		}
-		else
-		{
-			AController* PlayerController = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
-			if (PlayerController != nullptr && InstigatedBy == PlayerController)
+			else
 			{
-				APawn* OwnerPawn = Cast<APawn>(GetOwner());
-				if (OwnerPawn != nullptr)
+				AController* PlayerController = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
+				if (PlayerController != nullptr && InstigatedBy == PlayerController)
 				{
-					AEnemyAIController* OwnerAIController = Cast<AEnemyAIController>(OwnerPawn->GetController());
-					if (OwnerAIController != nullptr)
+					APawn* OwnerPawn = Cast<APawn>(GetOwner());
+					if (OwnerPawn != nullptr)
 					{
-						OwnerAIController->SetLastPlayerLocation(PlayerController->GetPawn());
+						AEnemyAIController* OwnerAIController = Cast<AEnemyAIController>(OwnerPawn->GetController());
+						if (OwnerAIController != nullptr)
+						{
+							OwnerAIController->SetLastPlayerLocation(PlayerController->GetPawn());
+						}
 					}
 				}
 			}
@@ -67,7 +70,7 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	}
 }
 
-float UHealthComponent::GetCurrentHealth()
+float UHealthComponent::GetCurrentHealth() const
 {
 	return CurrentHealth / TotalHealth;
 }

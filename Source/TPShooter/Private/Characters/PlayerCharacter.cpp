@@ -29,8 +29,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Movement bindings
-	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &ThisClass::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &ThisClass::MoveRight);
 
 	// Camera bindings
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
@@ -41,15 +41,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	// Fire bindings
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerCharacter::Fire);
-	PlayerInputComponent->BindAction("Fire", IE_Released, this, &APlayerCharacter::StopFiring);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ThisClass::Fire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ThisClass::StopFiring);
 
 	// Change weapon bindings
-	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &APlayerCharacter::ChangeWeapon);
+	PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ThisClass::ChangeWeapon);
 
 	// Sprint bindings
-	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::SprintPressed);
-	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::SprintReleased);
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ThisClass::SprintPressed);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ThisClass::SprintReleased);
 }
 
 // Move forward input

@@ -24,5 +24,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "User Widgets")
 	TSubclassOf<class UHUDUserWidget> HUDWidgetClass;
 
+	UPROPERTY()
 	UHUDUserWidget* HUDWidget;
 };

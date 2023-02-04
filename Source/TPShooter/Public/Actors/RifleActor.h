@@ -37,6 +37,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	float FireRate;
 
+	UPROPERTY()
 	ACharacter* PlayerCharacter;
 
 	FTimerHandle FireTimerHandle;

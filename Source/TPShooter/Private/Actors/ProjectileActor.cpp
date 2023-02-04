@@ -24,14 +24,7 @@ void AProjectileActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Mesh->OnComponentHit.AddDynamic(this, &AProjectileActor::OnHit);
-}
-
-// Called every frame
-void AProjectileActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	Mesh->OnComponentHit.AddDynamic(this, &ThisClass::OnHit);
 }
 
 void AProjectileActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

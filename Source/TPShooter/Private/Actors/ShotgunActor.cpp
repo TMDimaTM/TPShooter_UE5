@@ -23,12 +23,12 @@ void AShotgunActor::Fire_Implementation()
 
 	for (int32 i = 0; i < BulletsPerShot; i++)
 	{
-		GetRandomBulletDirection();
+		SetRandomBulletDirection();
 		SpawnProjectile();
 	}
 }
 
-void AShotgunActor::GetRandomBulletDirection()
+void AShotgunActor::SetRandomBulletDirection()
 {
 	if (UCameraComponent* Camera = GetOwner()->FindComponentByClass<UCameraComponent>())
 	{

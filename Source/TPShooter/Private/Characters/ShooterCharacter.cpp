@@ -52,7 +52,7 @@ void AShooterCharacter::SetStartWeapon()
 	CurrentWeapon = UsableWeapons[0];
 }
 
-bool AShooterCharacter::IsSprinting()
+bool AShooterCharacter::IsSprinting() const
 {
 	return GetVelocity().Length() >= SprintMaxSpeed - 10.0f;
 }

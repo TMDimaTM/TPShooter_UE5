@@ -33,5 +33,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	float RandomBulletAngle;
 
-	void GetRandomBulletDirection();
+	void SetRandomBulletDirection();
 };

@@ -15,12 +15,12 @@ AWeaponActor::AWeaponActor()
 	SetRootComponent(Mesh);
 }
 
-FTransform AWeaponActor::GetMuzzleTransform()
+FTransform AWeaponActor::GetMuzzleTransform() const
 {
 	return Mesh->GetSocketTransform("MuzzleFlashSocket");
 }
 
-void AWeaponActor::SpawnProjectile()
+void AWeaponActor::SpawnProjectile() const
 {
 	AActor* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileActor>(Projectile, SpawnProjectileLocation, SpawnProjectileRotation);
 	SpawnedProjectile->SetOwner(GetOwner());

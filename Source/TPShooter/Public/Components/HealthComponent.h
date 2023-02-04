@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-	float GetCurrentHealth();
+	float GetCurrentHealth() const;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")

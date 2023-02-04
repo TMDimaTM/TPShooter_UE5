@@ -30,7 +30,7 @@ void UHUDUserWidget::NativeConstruct()
 	AShooterGameModeBase* GameMode = Cast<AShooterGameModeBase>(UGameplayStatics::GetGameMode(this));
 	if (GameMode != nullptr)
 	{
-		EnemyCountText->TextDelegate.BindUFunction(GameMode, "GetEnemiesLeft");
+		EnemyCountText->TextDelegate.BindUFunction(GameMode, "GetAliveEnemiesLeft");
 		EnemyCountText->SynchronizeProperties();
 	}
 }

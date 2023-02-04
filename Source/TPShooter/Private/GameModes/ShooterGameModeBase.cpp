@@ -57,7 +57,7 @@ TArray<AActor*> AShooterGameModeBase::GetAliveEnemies()
 	return AliveEnemyActors;
 }
 
-FText AShooterGameModeBase::GetEnemiesLeft()
+FText AShooterGameModeBase::GetAliveEnemiesLeft() const
 {
 	return FText::AsNumber(AliveEnemyActors.Num());
 }
@@ -68,10 +68,10 @@ void AShooterGameModeBase::GameOver(bool bIsWin)
 	CreateGameOverWidget(bIsWin);
 
 	FTimerHandle RestartLevelTimerHandle;
-	GetWorldTimerManager().SetTimer(RestartLevelTimerHandle, this, &AShooterGameModeBase::RestartLevel, RestartLevelTime, false);
+	GetWorldTimerManager().SetTimer(RestartLevelTimerHandle, this, &ThisClass::RestartLevel, RestartLevelTime, false);
 }
 
-void AShooterGameModeBase::RemoveHUD()
+void AShooterGameModeBase::RemoveHUD() const
 {
 	AShooterHUD* HUD = Cast<AShooterHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 	if (HUD != nullptr)
@@ -90,7 +90,7 @@ void AShooterGameModeBase::CreateGameOverWidget(bool bIsWin)
 	}
 }
 
-void AShooterGameModeBase::RestartLevel()
+void AShooterGameModeBase::RestartLevel() const
 {
 	FString CurrentMapName = GetWorld()->GetMapName();
 	CurrentMapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);

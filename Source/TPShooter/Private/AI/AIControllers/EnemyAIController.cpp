@@ -26,14 +26,14 @@ void AEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Character = Cast<AEnemyCharacter>(GetPawn());
+	SelfCharacter = Cast<AEnemyCharacter>(GetPawn());
 
 	if (BehaviorTree != nullptr)
 	{
 		RunBehaviorTree(BehaviorTree);
 	}
 
-	AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::PerceptionUpdate);
+	AIPerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &ThisClass::PerceptionUpdate);
 }
 
 void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
@@ -41,20 +41,20 @@ void AEnemyAIController::PerceptionUpdate(AActor* Actor, FAIStimulus Stimulus)
 	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(Actor))
 	{
 		UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
-		if (BlackboardComp != nullptr && Character != nullptr)
+		if (BlackboardComp != nullptr && SelfCharacter != nullptr)
 		{
 			if (Stimulus.WasSuccessfullySensed())
 			{
 				BlackboardComp->SetValueAsObject("Player", PlayerCharacter);
 
-				Character->bUseControllerRotationYaw = true;
+				SelfCharacter->bUseControllerRotationYaw = true;
 			}
 			else
 			{
 				BlackboardComp->ClearValue("Player");
 				SetLastPlayerLocation(PlayerCharacter);
 
-				Character->bUseControllerRotationYaw = false;
+				SelfCharacter->bUseControllerRotationYaw = false;
 			}
 		}
 	}
